@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Encriptacion_seguridad_informatica</string>
+    <string name="error">El campo esta vacio</string>
 </resources>

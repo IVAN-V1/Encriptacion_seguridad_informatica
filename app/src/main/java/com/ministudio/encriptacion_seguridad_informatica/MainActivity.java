@@ -11,7 +11,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputLayout;
 import com.ministudio.encriptacion_seguridad_informatica.Clases.UTF_8_encriptacion;
+import com.ministudio.encriptacion_seguridad_informatica.Clases.cifrado;
+
+import java.nio.charset.StandardCharsets;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -23,10 +27,6 @@ public class MainActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        EditText editText=findViewById(R.id.editext_texto_input);
-
-        String texto= editText.getText().toString();
 
 
 
@@ -50,22 +50,48 @@ public class MainActivity extends AppCompatActivity {
                 AutoCompleteTextView tipo_encriptacion = findViewById(R.id.Auto_completext);
                 String tipo_encrip = tipo_encriptacion.getText().toString();
 
+
+                EditText texto_p_cifrar=findViewById(R.id.editext_texto_input);
+
+                String texto= texto_p_cifrar.getText().toString();
+
                 EditText resultado = findViewById(R.id.resultado);
 
-                if (tipo_encrip.equals("")) {
-                    Toast.makeText(MainActivity.this, "Campo vacío", Toast.LENGTH_SHORT).show();
+                EditText text_no_cifrado = findViewById(R.id.texto_desifrado);
+
+
+                if (texto.equals("")) {
+
+                    // Obtén una referencia al TextInputLayout
+                    TextInputLayout input_text_normal = findViewById(R.id.textInputLayout_texto_normal);
+                    input_text_normal.setError(getString(R.string.error));
+                    // Obtén una referencia al TextInputLayout
+
+
+                } else if (tipo_encrip.equals("")) {
+
+                    TextInputLayout input_tipo_cifrado = findViewById(R.id.tipo_encriptacion);
+                    input_tipo_cifrado.setError(getString(R.string.error));
+
                 } else if (tipo_encrip.equals("MD5")) {
                     // Lógica para MD5
                 } else if (tipo_encrip.equals("SHA 256")) {
                     // Lógica para SHA 256
                 } else if (tipo_encrip.equals("UTF-8")) {
-                    // Limpiar el campo de resultado antes de mostrar el resultado de la nueva encriptación
-                    resultado.setText("");
 
-                    Toast.makeText(MainActivity.this, "UTF-8", Toast.LENGTH_SHORT).show();
 
-                    UTF_8_encriptacion utf8Encriptacion = new UTF_8_encriptacion();
-                    utf8Encriptacion.encryptAndSetEditText(texto, resultado);
+                    cifrado cifrado=new cifrado();
+                    try {
+
+                        resultado.setText(cifrado.cifra(texto).toString());
+
+                        byte[] des=cifrado.cifra(texto);
+                        text_no_cifrado.setText(cifrado.descifra(des));
+
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+
                 }
             }
         });
