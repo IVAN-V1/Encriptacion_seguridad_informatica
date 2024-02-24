@@ -14,7 +14,9 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ministudio.encriptacion_seguridad_informatica.Clases.UTF_8_encriptacion;
 import com.ministudio.encriptacion_seguridad_informatica.Clases.cifrado;
+import com.ministudio.encriptacion_seguridad_informatica.Clases.md5;
 
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
 
@@ -75,6 +77,29 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if (tipo_encrip.equals("MD5")) {
                     // Lógica para MD5
+
+                    cifrado cifrado=new cifrado();
+
+                    EditText etInput = (EditText) findViewById(R.id.editext_texto_input);
+                    EditText tvOutput = (EditText) findViewById(R.id.resultado);
+
+                    byte [] md5Input = etInput.getText().toString().getBytes();
+                    BigInteger md5Data = null;
+
+                    try {
+
+                        md5Data = new BigInteger(1, md5.encryptMD5(md5Input));
+                        byte[] des=cifrado.cifra(texto);
+                        text_no_cifrado.setText(cifrado.descifra(des));
+                    }catch (Exception e) {
+                     e.printStackTrace();
+                    }
+
+                    String md5Str = md5Data.toString(16);
+                    tvOutput.setText(md5Str);
+
+
+
                 } else if (tipo_encrip.equals("SHA 256")) {
                     // Lógica para SHA 256
                 } else if (tipo_encrip.equals("UTF-8")) {
