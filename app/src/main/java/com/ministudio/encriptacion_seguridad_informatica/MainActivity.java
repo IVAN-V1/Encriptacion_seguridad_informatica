@@ -5,19 +5,18 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
-import com.ministudio.encriptacion_seguridad_informatica.Clases.UTF_8_encriptacion;
-import com.ministudio.encriptacion_seguridad_informatica.Clases.cifrado;
+import com.ministudio.encriptacion_seguridad_informatica.Clases.CifradoCesar;
+import com.ministudio.encriptacion_seguridad_informatica.Clases.UTF_8;
 import com.ministudio.encriptacion_seguridad_informatica.Clases.md5;
 
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-          AutoCompleteTextView Remolques = findViewById(R.id.Auto_completext);
+        AutoCompleteTextView lista_encriptacion = findViewById(R.id.Auto_completext);
           // Define una lista de elementos de autocompletar
                   String[] Remolques_ = {
 
@@ -41,7 +40,28 @@ public class MainActivity extends AppCompatActivity {
           // Crea un adaptador ArrayAdapter y configúralo con la lista de elementos
                   ArrayAdapter<String> adapter7 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1, Remolques_);
           // Asigna el adaptador al AutoCompleteTextView
-                  Remolques.setAdapter(adapter7);
+                  lista_encriptacion.setAdapter(adapter7);
+
+
+        TextInputLayout textInputLayoutPosicion = findViewById(R.id.text_input_posicion);
+        textInputLayoutPosicion.setVisibility(View.GONE);
+
+
+        lista_encriptacion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedOption = (String) parent.getItemAtPosition(position);
+                if (selectedOption.equals("Cifrado Cesar")) {
+                    textInputLayoutPosicion.setVisibility(View.VISIBLE);
+                } else {
+                    textInputLayoutPosicion.setVisibility(View.GONE);
+                }
+
+            }
+        });
+
+
+
 
 
         MaterialButton button_cifrar = findViewById(R.id.BTN_cifrar);
@@ -76,24 +96,24 @@ public class MainActivity extends AppCompatActivity {
                     input_tipo_cifrado.setError(getString(R.string.error));
 
                 } else if (tipo_encrip.equals("MD5")) {
-                    // Lógica para MD5
 
-                    cifrado cifrado=new cifrado();
+                    UTF_8 UTF_8 =new UTF_8();
 
-                    EditText etInput = (EditText) findViewById(R.id.editext_texto_input);
-                    EditText tvOutput = (EditText) findViewById(R.id.resultado);
+                    EditText etInput =  findViewById(R.id.editext_texto_input);
+                    EditText tvOutput = findViewById(R.id.resultado);
 
                     byte [] md5Input = etInput.getText().toString().getBytes();
                     BigInteger md5Data = null;
 
                     try {
-
                         md5Data = new BigInteger(1, md5.encryptMD5(md5Input));
-                        byte[] des=cifrado.cifra(texto);
-                        text_no_cifrado.setText(cifrado.descifra(des));
+                        byte[] des= UTF_8.cifra(texto);
+                        text_no_cifrado.setText(UTF_8.descifra(des));
+
                     }catch (Exception e) {
                      e.printStackTrace();
                     }
+
 
                     String md5Str = md5Data.toString(16);
                     tvOutput.setText(md5Str);
@@ -101,24 +121,61 @@ public class MainActivity extends AppCompatActivity {
 
 
                 } else if (tipo_encrip.equals("SHA 256")) {
-                    // Lógica para SHA 256
+
+
+
+
                 } else if (tipo_encrip.equals("UTF-8")) {
 
 
-                    cifrado cifrado=new cifrado();
+                    UTF_8 UTF_8 =new UTF_8();
                     try {
 
-                        resultado.setText(cifrado.cifra(texto).toString());
+                        resultado.setText(UTF_8.cifra(texto).toString());
 
-                        byte[] des=cifrado.cifra(texto);
-                        text_no_cifrado.setText(cifrado.descifra(des));
+                        byte[] des= UTF_8.cifra(texto);
+                        text_no_cifrado.setText(UTF_8.descifra(des));
 
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
 
+                } else if (tipo_encrip.equals("Cifrado Cesar")) {
+
+
+                    EditText editText_posicion = findViewById(R.id.posicion);
+                    String posicion = editText_posicion.getText().toString().trim(); // Asegúrate de quitar espacios en blanco al principio y al final
+
+                    if (posicion.isEmpty()) {
+                        // Obtén una referencia al TextInputLayout
+                        TextInputLayout input_text_normal = findViewById(R.id.text_input_posicion);
+                        input_text_normal.setError(getString(R.string.error));
+                    } else {
+
+
+                        try {
+                            int change_posicion = Integer.parseInt(posicion);
+
+                            if (change_posicion >= 1) {
+                                resultado.setText(CifradoCesar.cifrar(texto, change_posicion));
+                                String text_p_desifra = CifradoCesar.cifrar(texto, change_posicion);
+                                text_no_cifrado.setText(CifradoCesar.descifrar(text_p_desifra, change_posicion));
+                            }
+                        } catch (NumberFormatException e) {
+                            // Manejar la excepción si la entrada no es un número válido
+                            e.printStackTrace(); // O cualquier otra acción que desees realizar en caso de excepción
+                        }
+                    }
+
+
+
                 }
-            }
+
+
+
+                }
+
+
         });
 
 

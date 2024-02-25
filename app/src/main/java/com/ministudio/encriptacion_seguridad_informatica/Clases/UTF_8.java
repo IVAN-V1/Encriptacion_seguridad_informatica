@@ -1,13 +1,11 @@
 package com.ministudio.encriptacion_seguridad_informatica.Clases;
 
-import android.widget.EditText;
-
 import java.security.MessageDigest;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-public class cifrado {
+public class UTF_8 {
 
     public byte[] cifra(String sinCifrar) throws Exception {
         final byte[] bytes = sinCifrar.getBytes("UTF-8");
