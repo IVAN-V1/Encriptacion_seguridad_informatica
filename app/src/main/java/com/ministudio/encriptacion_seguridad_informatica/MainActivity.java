@@ -15,6 +15,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.ministudio.encriptacion_seguridad_informatica.Clases.CifradoCesar;
 import com.ministudio.encriptacion_seguridad_informatica.Clases.UTF_8;
 import com.ministudio.encriptacion_seguridad_informatica.Clases.md5;
+import com.ministudio.encriptacion_seguridad_informatica.Clases.sha256;
 
 import java.math.BigInteger;
 
@@ -121,6 +122,26 @@ public class MainActivity extends AppCompatActivity {
 
 
                 } else if (tipo_encrip.equals("SHA 256")) {
+                    // Lógica para SHA 256
+
+                    UTF_8 UTF_8 =new UTF_8();
+                    EditText etInput = findViewById(R.id.editext_texto_input);
+                    EditText tvOutput = findViewById(R.id.resultado);
+
+                    byte[] sha256Input = etInput.getText().toString().getBytes();
+                    BigInteger sha256Data = null;
+
+                    try {
+                        sha256Data = new BigInteger(1, sha256.encryptSHA256(sha256Input));
+                        byte[] des= UTF_8.cifra(texto);
+                        text_no_cifrado.setText(UTF_8.descifra(des));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    String sha256Str = sha256Data.toString(16).toUpperCase();
+                    tvOutput.setText(sha256Str);
+                    // terminación
 
 
 
