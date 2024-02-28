@@ -16,6 +16,7 @@ import com.ministudio.encriptacion_seguridad_informatica.Clases.CifradoCesar;
 import com.ministudio.encriptacion_seguridad_informatica.Clases.UTF_8;
 import com.ministudio.encriptacion_seguridad_informatica.Clases.md5;
 import com.ministudio.encriptacion_seguridad_informatica.Clases.sha256;
+import com.ministudio.encriptacion_seguridad_informatica.Clases.sustitucion_simple;
 
 import java.math.BigInteger;
 
@@ -188,13 +189,28 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
+                } else if (tipo_encrip.equals("Sustitucion simple")) {
+
+
+
+                    try {
+
+                        resultado.setText(sustitucion_simple.encrypt(texto).toString());
+
+                        String susi_sim=sustitucion_simple.encrypt(texto.toString());
+                        text_no_cifrado.setText(sustitucion_simple.decrypt(susi_sim));
+                    }
+                    catch (Exception e){
+
+
+
+                    }
 
 
                 }
 
 
-
-                }
+            }
 
 
         });
